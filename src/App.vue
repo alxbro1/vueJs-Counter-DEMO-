@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import ButtonsGroup from '@/components/buttons-group/index.vue'
 import { useCounter } from "@/store/counter";
 const counterStore = useCounter()
 
 const updateCounter = (event) => {
-  const value = parseInt(event.target.value, 10); // Convertir el valor a un número entero
+  const value = parseInt(event.target.value, 10);
   if (!isNaN(value)) {
     counterStore.inputSet(value);
   }
@@ -19,29 +19,11 @@ const updateCounter = (event) => {
     {{ counterStore.counter }}
   </h2>
   <section class="buttons-group">
-    <button
-      type="button"
-      @click.left="counterStore.increment()"
-      style="background-color: green;">
-      Increment 
-    </button>
-    <button
-      v-if="counterStore.counter != 0"
-      type="button"
-      @click.left="counterStore.reset()"
-      style="background-color: gray;">
-      Reset
-    </button>
-    <button
-      type="button"
-      @click.right.prevent="counterStore.decrement()"
-      style="background-color: red;">
-      Decrement
-    </button>
+    <ButtonsGroup/>
   </section>
   <section class="input-section">
     <h3>Select Manual Value:</h3>
-    <input type="number" @input="updateCounter" min="0" max="100" />
+    <input type="number" :value="counterStore.counter" @input="updateCounter" min="0" max="100" />
   </section>
 </template>
 <style scoped>
@@ -88,7 +70,4 @@ button {
   color:whitesmoke
 }
 
-section{
-
-}
 </style>
