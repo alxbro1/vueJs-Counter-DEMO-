@@ -1,49 +1,47 @@
 <script setup>
 import { ref } from "vue";
+import { useCounter } from "@/store/counter";
+const counterStore = useCounter()
 
-const counter = ref(0);
+const updateCounter = (event) => {
+  const value = parseInt(event.target.value, 10); // Convertir el valor a un número entero
+  if (!isNaN(value)) {
+    counterStore.inputSet(value);
+  }
+};
 
-const onLeftClick = () => {
-  counter.value++;
-};
-const onRightClick = () => {
-  counter.value--;
-};
-const onResetCounter = () => {
-  counter.value = 0;
-};
 </script>
 <template>
   <h1>Single counder - DEMO</h1>
   <h2
-    :class="{ 'negative-value': counter < 0, 'positive-value': counter > 0 }"
+    :class="{ 'negative-value': counterStore.counter < 0, 'positive-value': counterStore.counter > 0 }"
     class="counter">
-    {{ counter }}
+    {{ counterStore.counter }}
   </h2>
   <section class="buttons-group">
     <button
       type="button"
-      @click.left="onLeftClick()"
+      @click.left="counterStore.increment()"
       style="background-color: green;">
-      Increment
+      Increment 
     </button>
     <button
-      v-if="counter != 0"
+      v-if="counterStore.counter != 0"
       type="button"
-      @click.left="onResetCounter()"
+      @click.left="counterStore.reset()"
       style="background-color: gray;">
       Reset
     </button>
     <button
       type="button"
-      @click.right.prevent="onRightClick()"
+      @click.right.prevent="counterStore.decrement()"
       style="background-color: red;">
       Decrement
     </button>
   </section>
   <section class="input-section">
     <h3>Select Manual Value:</h3>
-    <input type="number" v-model.number="counter" min="0" max="100" />
+    <input type="number" @input="updateCounter" min="0" max="100" />
   </section>
 </template>
 <style scoped>
